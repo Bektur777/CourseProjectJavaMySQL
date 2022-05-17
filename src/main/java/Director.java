@@ -3,12 +3,8 @@ import java.util.Scanner;
 
 public class Director {
 
-    Reading reading = new Reading();
 
-    public Director() throws SQLException {
-    }
-
-    public static void main(String[] args) throws Exception{
+    public static void directorMenu() throws SQLException {
 
         Director director = new Director();
         Scanner scan = new Scanner(System.in);
@@ -17,8 +13,7 @@ public class Director {
                 Greetings dear Director!
                 Please dial the menu number to work with the program, if you have finished, then dial 6:""");
 
-        while(true) {
-
+        try{
             System.out.println("""
                 1. Show list of equipment
                 2. Show Number of pieces of equipment
@@ -34,9 +29,11 @@ public class Director {
                 case "3" -> director.maxAndMinCount("Max");
                 case "4" -> director.maxAndMinCount("Min");
                 case "5" -> director.viewReports();
-                case "6" -> Main.main(args);
-                default -> System.out.println("Wrong input!!! Try again the next time :)");
+                case "6" -> MainMenu.mainMenu();
+                default -> System.out.println("Wrong input!!! Try again :)");
             }
+        } catch (Exception e) {
+            directorMenu();
         }
     }
 

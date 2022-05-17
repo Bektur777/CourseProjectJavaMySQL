@@ -5,7 +5,7 @@ public class Manager {
 
     public static Scanner scan = new Scanner(System.in);
 
-    public static void main(String[] args) throws Exception{
+    public static void managerMenu() throws Exception{
 
         Manager manager = new Manager();
         Director director = new Director();
@@ -14,8 +14,7 @@ public class Manager {
                 Greetings, dear Zavkhoz!
                 Please dial the menu number to work with the program, if you are finished, then dial 7:""");
 
-        while(true) {
-
+        try {
             System.out.println("""                    
                 1.Show all list of equipment for school
                 2.Search for equipment:
@@ -35,9 +34,11 @@ public class Manager {
                 case "4" -> manager.orderEquipment();
                 case "5" -> manager.viewOrderingEquipment();
                 case "6" -> manager.deleteOrder();
-                case "7" -> Main.main(args);
+                case "7" -> MainMenu.mainMenu();
                 default -> System.out.println("Wrong input!!! Try again :)");
             }
+        } catch (Exception e) {
+            managerMenu();
         }
     }
 
