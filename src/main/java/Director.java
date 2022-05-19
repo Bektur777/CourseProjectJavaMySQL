@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Director {
 
 
-    public static void directorMenu() throws SQLException {
+    public static void directorMenu() {
 
         Director director = new Director();
         Scanner scan = new Scanner(System.in);
@@ -44,12 +44,17 @@ public class Director {
         selecting.setQuery("select * from allequipment");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
+
+        System.out.println("+------------+");
+        System.out.printf("| %-10s |\n","NAME");
         while(resultSet.next()) {
+            System.out.println("+------------+");
             equipment.setName(resultSet.getString("name"));
-            String result = String.format("Name: %s",equipment.getName());
+            String result = String.format("| %-10s |",equipment.getName());
             System.out.println(result);
         }
-
+        System.out.println("+------------+");
+        directorMenu();
     }
 
     public void viewCountOfEquipment() throws SQLException {
@@ -58,12 +63,17 @@ public class Director {
         selecting.setQuery("select * from allequipment");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
+        System.out.println("+------------+------------+");
+        System.out.printf("| %-10s | %-10s |\n","NAME", "COUNT");
         while(resultSet.next()) {
+            System.out.println("+------------+------------+");
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
-            String result = String.format("Name: %s Count: %s",equipment.getName(), equipment.getCount());
+            String result = String.format("| %-10s | %-10s |",equipment.getName(), equipment.getCount());
             System.out.println(result);
         }
+        System.out.println("+------------+------------+");
+        directorMenu();
     }
 
     public void maxAndMinCount(String maxOrMin) throws SQLException {
@@ -75,7 +85,9 @@ public class Director {
         int min = Integer.MAX_VALUE;
         int max = 0;
         StringBuilder result = new StringBuilder();
-
+        System.out.println("+------------+------------+");
+        System.out.printf("| %-10s | %-10s |\n","NAME", "COUNT");
+        System.out.println("+------------+------------+");
         if (maxOrMin.equals("Max")) {
             while (resultSet.next()) {
                 equipment.setName(resultSet.getString("name"));
@@ -84,8 +96,10 @@ public class Director {
                     max = equipment.getCount();
                 }
             }
-            result.append(String.format("Name: %s Count: %s", equipment.getName(), max));
+            result.append(String.format("| %-10s | %-10s |", equipment.getName(), max));
             System.out.println(result);
+            System.out.println("+------------+------------+");
+            directorMenu();
         }
         else if (maxOrMin.equals("Min")) {
             while (resultSet.next()) {
@@ -95,8 +109,10 @@ public class Director {
                     min = equipment.getCount();
                 }
             }
-            result.append(String.format("Name: %s Count: %s", equipment.getName(), min));
+            result.append(String.format("| %-10s | %-10s |", equipment.getName(), max));
             System.out.println(result);
+            System.out.println("+------------+------------+");
+            directorMenu();
         }
     }
 
@@ -105,16 +121,22 @@ public class Director {
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from allequipment");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
+
+        System.out.println("+--------+------------+------------+---------------------+");
+        System.out.printf("| %6s | %-10s | %-10s | %-19s |\n","ID", "NAME", "COUNT", "DATE");
         while(resultSet.next()) {
+            System.out.println("+--------+------------+------------+---------------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("" +
-                    "Serial number: %s Name: %s Count: %s Date: %s", equipment.getSerialNumber(),
+            String result = String.format(
+                    "| %6s | %-10s | %-10s | %-10s |", equipment.getSerialNumber(),
                     equipment.getName(), equipment.getCount(), equipment.getDate());
             System.out.println(result);
         }
+        System.out.println("+--------+------------+------------+---------------------+");
+        directorMenu();
     }
 
 }

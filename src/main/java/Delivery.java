@@ -1,7 +1,4 @@
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 public class Delivery {
@@ -44,43 +41,53 @@ public class Delivery {
         }
     }
 
-    public void viewEquipmentForDelivery() throws SQLException {
+    public void viewEquipmentForDelivery() throws Exception {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from orderedproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
+        System.out.println("+--------+------------+------------+---------------------+");
+        System.out.printf("| %6s | %-10s | %-10s | %-19s |\n","ID", "NAME", "COUNT", "DATE");
         while(resultSet.next()) {
+            System.out.println("+--------+------------+------------+---------------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("Serial number: %s Name: %s Count: %s Date: %s",
+            String result = String.format("| %6s | %-10s | %-10s | %-10s |",
                     equipment.getSerialNumber(), equipment.getName(), equipment.getCount(), equipment.getDate());
 
             System.out.println(result);
         }
+        System.out.println("+--------+------------+------------+---------------------+");
+        deliveryMenu();
     }
 
-    public void viewDeliveredEquipment() throws SQLException {
+    public void viewDeliveredEquipment() throws Exception {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from deliveredproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
+        System.out.println("+--------+------------+------------+---------------------+");
+        System.out.printf("| %6s | %-10s | %-10s | %-19s |\n","ID", "NAME", "COUNT", "DATE");
         while(resultSet.next()) {
+            System.out.println("+--------+------------+------------+---------------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("Serial number: %s Name: %s Count: %s Date: %s",
+            String result = String.format("| %6s | %-10s | %-10s | %-10s |",
                     equipment.getSerialNumber(), equipment.getName(), equipment.getCount(), equipment.getDate());
 
             System.out.println(result);
         }
+        System.out.println("+--------+------------+------------+---------------------+");
+        deliveryMenu();
     }
 
-    public void deliverEquipment() throws SQLException {
+    public void deliverEquipment() throws Exception {
 
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
@@ -110,53 +117,62 @@ public class Delivery {
         }
         statement.executeUpdate("delete from orderedproducts where id = " + id);
         statement.execute("insert deliveredproducts(serialnumber, name, count, date) values" + deliver);
+        deliveryMenu();
     }
 
-    public void viewCountOfDeliveredEquipment() throws SQLException {
+    public void viewCountOfDeliveredEquipment() throws Exception {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from deliveredproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
         int count = 0;
-        System.out.println("Name Count");
+        System.out.println("+------------+------------+");
+        System.out.printf("| %-10s | %-10s |\n","NAME", "COUNT");
         while(resultSet.next()) {
+            System.out.println("+------------+------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("%s %s ", equipment.getName(), equipment.getCount());
+            String result = String.format("| %-10s | %-10s |", equipment.getName(), equipment.getCount());
             System.out.println(result);
             count += equipment.getCount();
         }
+        System.out.println("+------------+------------+");
         System.out.println("All delivered products: " + count);
+        deliveryMenu();
     }
 
-    public void viewCountOfOrderedEquipment() throws SQLException {
+    public void viewCountOfOrderedEquipment() throws Exception {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from orderedproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
         int count = 0;
-        System.out.println("Name Count");
+        System.out.println("+------------+------------+");
+        System.out.printf("| %-10s | %-10s |\n","NAME", "COUNT");
         while(resultSet.next()) {
+            System.out.println("+------------+------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("%s %s ", equipment.getName(), equipment.getCount());
+            String result = String.format("| %-10s | %-10s |", equipment.getName(), equipment.getCount());
             System.out.println(result);
             count += equipment.getCount();
         }
+        System.out.println("+------------+------------+");
         System.out.println("All ordered products: " + count);
+        deliveryMenu();
     }
 
-    public void viewSalary() throws SQLException {
+    public void viewSalary() throws Exception {
 
         Selecting selecting = new Selecting();
 
-        selecting.setQuery("select * from orderedproducts");
+        selecting.setQuery("select * from deliveredproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
         Statement statement = selecting.getStatement();
 
@@ -171,7 +187,7 @@ public class Delivery {
         wallet();
     }
 
-    public void wallet() throws SQLException {
+    public void wallet() throws Exception {
         Wallet wallet = new Wallet();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from salary");
@@ -182,6 +198,7 @@ public class Delivery {
             wallet.setWallet(Integer.parseInt(resultSet.getString("wallet")));
             System.out.println ("Your salary: " + wallet.getWallet() + "$");
         }
+        deliveryMenu();
     }
 
 }

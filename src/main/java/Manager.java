@@ -5,7 +5,7 @@ public class Manager {
 
     public static Scanner scan = new Scanner(System.in);
 
-    public static void managerMenu() throws Exception{
+    public static void managerMenu() {
 
         Manager manager = new Manager();
         Director director = new Director();
@@ -28,7 +28,7 @@ public class Manager {
             String numberOfMenu = scan.nextLine();
 
             switch (numberOfMenu) {
-                case "1" -> director.viewCountOfEquipment();
+                case "1" -> manager.viewCountOfEquipment();
                 case "2" -> manager.searchingEquipment();
                 case "3" -> director.viewReports();
                 case "4" -> manager.orderEquipment();
@@ -40,6 +40,25 @@ public class Manager {
         } catch (Exception e) {
             managerMenu();
         }
+    }
+
+    public void viewCountOfEquipment() throws SQLException {
+        Equipment equipment = new Equipment();
+        Selecting selecting = new Selecting();
+        selecting.setQuery("select * from allequipment");
+        ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
+
+        System.out.println("+------------+------------+");
+        System.out.printf("| %-10s | %-10s |\n","NAME", "COUNT");
+        while(resultSet.next()) {
+            System.out.println("+------------+------------+");
+            equipment.setName(resultSet.getString("name"));
+            equipment.setCount(Integer.parseInt(resultSet.getString("count")));
+            String result = String.format("| %-10s | %-10s |",equipment.getName(), equipment.getCount());
+            System.out.println(result);
+        }
+        System.out.println("+------------+------------+");
+        managerMenu();
     }
 
     public void searchingEquipment() throws SQLException {
@@ -63,39 +82,72 @@ public class Manager {
 
     }
 
+    public void viewReports() throws SQLException {
+        Equipment equipment = new Equipment();
+        Selecting selecting = new Selecting();
+        selecting.setQuery("select * from allequipment");
+        ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
+
+        System.out.println("+--------+------------+------------+---------------------+");
+        System.out.printf("| %6s | %-10s | %-10s | %-19s |\n","ID", "NAME", "COUNT", "DATE");
+        while(resultSet.next()) {
+            System.out.println("+--------+------------+------------+---------------------+");
+            equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
+            equipment.setName(resultSet.getString("name"));
+            equipment.setCount(Integer.parseInt(resultSet.getString("count")));
+            equipment.setDate(resultSet.getString("date"));
+            String result = String.format(
+                    "| %6s | %-10s | %-10s | %-10s |", equipment.getSerialNumber(),
+                    equipment.getName(), equipment.getCount(), equipment.getDate());
+            System.out.println(result);
+        }
+        System.out.println("+--------+------------+------------+---------------------+");
+        managerMenu();
+    }
+
     public void searching(String searchingByName) throws SQLException {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from allequipment");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
+        System.out.println("+--------+------------+------------+");
+        System.out.printf("| %-6s | %-10s | %-10s |\n","ID", "NAME", "COUNT");
+        System.out.println("+--------+------------+------------+");
         while(resultSet.next()) {
             equipment.setSerialNumber(Integer.parseInt((resultSet.getString("serialnumber"))));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
 
             if (searchingByName.equals(equipment.getName())) {
-                String result = String.format("%-10s %-10s %-10s",
+                String result = String.format("| %-6s | %-10s | %-10s |",
                         equipment.getSerialNumber(), equipment.getName(), equipment.getCount());
                 System.out.println(result);
             }
         }
+        System.out.println("+--------+------------+------------+");
+        managerMenu();
     }
     public void searching(int searchingBySerNum) throws SQLException {
         Equipment equipment = new Equipment();
         Selecting selecting = new Selecting();
         selecting.setQuery("select * from allequipment");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
+        System.out.println("+--------+------------+------------+");
+        System.out.printf("| %-6s | %-10s | %-10s |\n","ID", "NAME", "COUNT");
+        System.out.println("+--------+------------+------------+");
         while(resultSet.next()) {
             equipment.setSerialNumber(Integer.parseInt((resultSet.getString("serialnumber"))));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
 
             if (searchingBySerNum == equipment.getSerialNumber()) {
-                String result = String.format("%-10s %-10s %-10s",
+                String result = String.format("| %-6s | %-10s | %-10s |",
                         equipment.getSerialNumber(), equipment.getName(), equipment.getCount());
                 System.out.println(result);
             }
         }
+        System.out.println("+--------+------------+------------+");
+        managerMenu();
     }
 
     public void orderEquipment() throws SQLException {
@@ -112,6 +164,7 @@ public class Manager {
 
         String orderEquipment = String.format("(%s,'%s',%s, %s)", num, order, count, "now()");
         statement.executeUpdate("insert orderedproducts(serialnumber, name, count, date) values" + orderEquipment);
+        managerMenu();
     }
 
     public void viewOrderingEquipment() throws SQLException {
@@ -120,16 +173,21 @@ public class Manager {
         selecting.setQuery("select * from orderedproducts");
         ResultSet resultSet = selecting.setResultSet(selecting.getStatement().executeQuery(selecting.getQuery()));
 
+        System.out.println("+--------+------------+------------+---------------------+");
+        System.out.printf("| %6s | %-10s | %-10s | %-19s |\n","ID", "NAME", "COUNT", "DATE");
         while(resultSet.next()) {
+            System.out.println("+--------+------------+------------+---------------------+");
             equipment.setSerialNumber(Integer.parseInt(resultSet.getString("serialnumber")));
             equipment.setName(resultSet.getString("name"));
             equipment.setCount(Integer.parseInt(resultSet.getString("count")));
             equipment.setDate(resultSet.getString("date"));
-            String result = String.format("Serial number: %s Name: %s Count: %s Date: %s",
+            String result = String.format("| %6s | %-10s | %-10s | %-10s |",
                     equipment.getSerialNumber(), equipment.getName(), equipment.getCount(), equipment.getDate());
 
             System.out.println(result);
         }
+        System.out.println("+--------+------------+------------+---------------------+");
+        managerMenu();
     }
 
     public void deleteOrder() throws SQLException {
@@ -151,6 +209,7 @@ public class Manager {
         }
         statement.execute("delete from orderedproducts where id = " + id);
         System.out.println("The order was delete");
+        managerMenu();
     }
 
 }

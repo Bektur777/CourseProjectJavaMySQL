@@ -10,12 +10,6 @@ public class Users {
 
     }
 
-    public Users (String username, String password, String account) {
-        this.username = username;
-        this.password = password;
-        this.account = account;
-    }
-
     public Users(int id, String username, String password, String account) {
         this.id = id;
         this.username = username;

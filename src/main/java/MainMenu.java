@@ -6,41 +6,42 @@ public class MainMenu {
     protected static final Scanner scanner = new Scanner(System.in);
     protected static MainMenu main = new MainMenu();
 
-    public static void mainMenu() throws Exception {
+    public static void mainMenu() {
 
         System.out.println("""
                 Choose the type of account
                 Director
                 Manager
                 Delivery""");
-
-        while (scanner.hasNextLine()){
-
-            String choiceAcc = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+        while (true){
+            String choiceAcc = scanner.nextLine().trim();
             if (choiceAcc.equalsIgnoreCase("director")
                     || choiceAcc.equalsIgnoreCase("manager")
                     || choiceAcc.equalsIgnoreCase("delivery")) {
                 main.choiceLogOrReg(choiceAcc);
             }
-            else{
-                System.out.println("Try again");
-                continue;
-            }
         }
 
     }
 
-    public void choiceLogOrReg(String choiceAcc) throws Exception {
+    public void choiceLogOrReg(String choiceAcc) {
 
-        System.out.println("Log in or register to continue ====> (log or reg)");
-        String entrance = scanner.next();
-        while (scanner.hasNextLine()) {
-            switch (entrance){
-                case "reg": main.registration(choiceAcc);
-                case "log": main.logIn(choiceAcc);
-                default: System.out.println("Try again");
+        try {
+            System.out.println("Log in or register to continue ====> (log or reg)");
+            String entrance = scanner.next();
+            switch (entrance) {
+                case "reg":
+                    main.registration(choiceAcc);
+                case "log":
+                    main.logIn(choiceAcc);
+                default:
+                    System.out.println("Try again");
+                    choiceLogOrReg(choiceAcc);
             }
+        } catch(Exception e) {
+            choiceLogOrReg(choiceAcc);
         }
+
 
     }
 
@@ -65,14 +66,10 @@ public class MainMenu {
             if (login.equals(users.getUsername()) &&
                     password.equals(users.getPassword()) &&
                     choiceAcc.equals(users.getAccount())) {
-                if (choiceAcc.equals("director")){
-                    Director.directorMenu();
-                }
-                else if (choiceAcc.equals("manager")){
-                    Manager.managerMenu();
-                }
-                else if (choiceAcc.equals("delivery")){
-                    Delivery.deliveryMenu();
+                switch (choiceAcc) {
+                    case "director" -> Director.directorMenu();
+                    case "manager" -> Manager.managerMenu();
+                    case "delivery" -> Delivery.deliveryMenu();
                 }
             }
             else {
@@ -84,7 +81,6 @@ public class MainMenu {
             System.out.println("Try again");
             main.logIn(choiceAcc);
         }
-
     }
 
     public void registration(String choiceAcc) throws Exception {
