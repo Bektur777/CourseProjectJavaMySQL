@@ -1,3 +1,5 @@
+CREATE SCHEMA `mydb` DEFAULT CHARACTER SET utf8 ;
+
 CREATE TABLE `mydb`.`account` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -27,3 +29,12 @@ CREATE TABLE `mydb`.`orderedproducts` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE TABLE `mydb`.`deliveredproducts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `serialnumber` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `count` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
